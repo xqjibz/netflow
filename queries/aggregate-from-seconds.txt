@@ -1,0 +1,18 @@
+[
+    {
+        $match: {
+                seconds: 1484164455
+            ,
+        }
+
+    }
+
+
+
+]
+
+
+[
+    { $group: {_id: '$seconds', count: {$sum: 1}}}
+
+]
