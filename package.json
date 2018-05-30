@@ -6,6 +6,9 @@
     "start": "node ./netflow-r.js"
   },
   "dependencies": {
-
+    "mongodb": "^3.1.0-beta4",
+    "mongoskin": "^2.1.0",
+    "node-netflowv9": "^0.2.12"
   }
+
 }
