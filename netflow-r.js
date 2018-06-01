@@ -18,29 +18,36 @@ MongoClient.connect("mongodb://localhost", function(err, host){
     Collector({port: 2055}).on('data', function _flowHandler(flow) {
         //console.log(flow)
         //console.log('got header:', flow.header)
-        if(flow.header && flow.flows){
-            receivedCount++;
-            var seconds = flow.header.seconds;
-            var rinfo = flow.rinfo.address;
-            if(sources.indexOf(rinfo) === -1){
-                console.log('adding: ', rinfo);
-                sources.push(rinfo)
+        db.collection('netflowRaw').insert(flow, function(err, result){
+            if(err){
+                console.log('error during insert: ', util.inspect(err, true, null))
+            } else {
+                writtenCount++
             }
-            if(flow.header.count > 0){
-                flow.flows.map(function(element, index, array){
-                    element.seconds = seconds;
-                    element.rinfo = rinfo;
-                    //console.log(element)
-                    db.collection('netflowRaw').insert(element, function(err, result){
-                        if(err){
-                            console.log('error during insert: ', util.inspect(err, true, null))
-                        } else {
-                            writtenCount++
-                        }
-                    })
-                })
-            }
-        }
+        })
+        // if(flow.header && flow.flows){
+        //     receivedCount++;
+        //     var seconds = flow.header.seconds;
+        //     var rinfo = flow.rinfo.address;
+        //     if(sources.indexOf(rinfo) === -1){
+        //         console.log('adding: ', rinfo);
+        //         sources.push(rinfo)
+        //     }
+        //     if(flow.header.count > 0){
+        //         flow.flows.map(function(element, index, array){
+        //             element.seconds = seconds;
+        //             element.rinfo = rinfo;
+        //             //console.log(element)
+        //             db.collection('netflowRaw').insert(element, function(err, result){
+        //                 if(err){
+        //                     console.log('error during insert: ', util.inspect(err, true, null))
+        //                 } else {
+        //                     writtenCount++
+        //                 }
+        //             })
+        //         })
+        //     }
+        // }
 
     })
 });
