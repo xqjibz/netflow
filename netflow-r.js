@@ -18,6 +18,8 @@ MongoClient.connect("mongodb://localhost", function(err, host){
     Collector({port: 2055}).on('data', function _flowHandler(flow) {
         //console.log(flow)
         //console.log('got header:', flow.header)
+        delete flow.packet
+        delete flow.templates
         db.collection('netflowRaw').insert(flow, function(err, result){
             if(err){
                 console.log('error during insert: ', util.inspect(err, true, null))
